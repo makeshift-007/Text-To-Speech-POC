@@ -1,0 +1,600 @@
+﻿@{
+    ViewBag.Title = "TTS Home";
+    Layout = null;
+}
+
+
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/materialize/0.95.1/css/materialize.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/materialize/0.95.1/js/materialize.min.js"></script>
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js'></script>
+
+
+<div class="container">
+
+    <div class="row">
+        <nav>
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="#" class="brand-logo">GOOGLE Text to Speech for Chrome</a>
+                </div>
+            </div>
+        </nav>
+
+    </div>
+    <form class="col s8 offset-s2">
+        <div class="row">
+
+            <label>Choose voice</label>
+            <select id="voices"></select>
+
+        </div>
+    </form>
+    <div class="row">
+        <div class="col s6">
+            <label>Rate</label>
+            <p class="range-field">
+                <input type="range" id="rate" min="1" max="100" value="10" />
+            </p>
+        </div>
+        <div class="col s6">
+            <label>Pitch</label>
+            <p class="range-field">
+                <input type="range" id="pitch" min="0" max="2" value="1" />
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12">
+            <textarea id="message" class="materialize-textarea"></textarea>
+            <label>Write message</label>
+        </div>
+    </div>
+    <a href="#" id="speak" class="waves-effect waves-light btn">Speak</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <nav>
+
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="#" class="brand-logo">MeSpeak.Js</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="col s8 offset-s2">
+        <div class="row">
+
+            <form id="speakData" onsubmit="meSpeak.speak(text.value, { amplitude: amplitude.value, wordgap: wordgap.value, pitch: pitch.value, speed: speed.value, variant: variant.options[variant.selectedIndex].value }); return false">
+
+                <p>
+                    <strong>Options:</strong>
+                    Amplitude: <input type="text" name="amplitude" size=5 value="100" />
+                    Pitch: <input type="text" name="pitch" size=5 value="50" />
+                    Speed: <input type="text" name="speed" size=5 value="175" />
+                    Word gap: <input type="text" name="wordgap" size=5 value="0" />
+
+
+                    <label>Variant:</label>  <select name="variant" class="mSelect" id="variantSelect">
+                        <option value="" selected>None</option>
+                        <option value="f1">f1 (female 1)</option>
+                        <option value="f2">f2 (female 2)</option>
+                        <option value="f3">f3 (female 3)</option>
+                        <option value="f4">f4 (female 4)</option>
+                        <option value="f5">f5 (female 5)</option>
+                        <option value="m1">m1 (male 1)</option>
+                        <option value="m2">m2 (male 2)</option>
+                        <option value="m3">m3 (male 3)</option>
+                        <option value="m4">m4 (male 4)</option>
+                        <option value="m5">m5 (male 5)</option>
+                        <option value="m6">m6 (male 6)</option>
+                        <option value="m7">m7 (male 7)</option>
+                        <option value="croak">croak</option>
+                        <option value="klatt">klatt</option>
+                        <option value="klatt2">klatt2</option>
+                        <option value="klatt3">klatt3</option>
+                        <option value="whisper">whisper</option>
+                        <option value="whisperf">whisperf (female)</option>
+                    </select>
+
+
+
+                </p>
+                <p>
+                    <strong>Voice:</strong> <select id="voiceSelect" class="mSelect" onchange="loadVoice(this.options[this.selectedIndex].value);">
+                        <option value="ca">ca - Catalan</option>
+                        <option value="cs">cs - Czech</option>
+                        <option value="de">de - German</option>
+                        <option value="el">el - Greek</option>
+                        <option value="en/en" selected="selected">en - English</option>
+                        <option value="en/en-n">en-n - English, regional</option>
+                        <option value="en/en-rp">en-rp - English, regional</option>
+                        <option value="en/en-sc">en-sc - English, Scottish</option>
+                        <option value="en/en-us">en-us - English, US</option>
+                        <option value="en/en-wm">en-wm - English, regional</option>
+                        <option value="eo">eo - Esperanto</option>
+                        <option value="es">es - Spanish</option>
+                        <option value="es-la">es-la - Spanish, Latin America</option>
+                        <option value="fi">fi - Finnish</option>
+                        <option value="fr">fr - French</option>
+                        <option value="hu">hu - Hungarian</option>
+                        <option value="it">it - Italian</option>
+                        <option value="kn">kn - Kannada</option>
+                        <option value="la">la - Latin</option>
+                        <option value="lv">lv - Latvian</option>
+                        <option value="nl">nl - Dutch</option>
+                        <option value="pl">pl - Polish</option>
+                        <option value="pt">pt - Portuguese, Brazil</option>
+                        <option value="pt-pt">pt-pt - Portuguese, European</option>
+                        <option value="ro">ro - Romanian</option>
+                        <option value="sk">sk - Slovak</option>
+                        <option value="sv">sv - Swedish</option>
+                        <option value="tr">tr - Turkish</option>
+                        <option value="zh">zh - Mandarin Chinese (Pinyin)</option>
+                        <option value="zh-yue">zh-yue - Cantonese Chinese</option>
+                    </select>
+                </p>
+                <p>
+                    <strong>Text:</strong> <input type="text" name="text" size=80 value="This is a test paragraph." />
+
+                    <input type="submit" value="Speak!" class="btn" />
+                    <input type="button" value="Stop" onclick="meSpeak.stop(); return true;" class="btn" />
+                </p>
+            </form>
+            <form onsubmit="return false"></form>
+        </div>
+    </div>
+</div>
+
+
+@*<div class="container">
+
+    <div class="row">
+        <nav>
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="#" class="brand-logo">TTS Custom</a>
+                </div>
+            </div>
+        </nav>
+
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12">
+            <textarea id="txtCustomTTS" class="materialize-textarea"></textarea>
+            <label>Write Message</label>
+        </div>
+    </div>
+    <button onclick="CustomTTS()" id="btnCustomSpeak" class="waves-effect waves-light btn">Speak</button>
+</div>*@
+
+<div class="container">
+
+    <div class="row">
+        <nav>
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="#" class="brand-logo">Server Side Processing</a>
+                </div>
+            </div>
+        </nav>
+
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12">
+            <textarea id="txtServerSide1" class="materialize-textarea"></textarea>
+            <label>Write Message</label>
+        </div>
+    </div>
+    <button onclick="ProcessServerSide1()"  class="waves-effect waves-light btn">Speak</button>
+    <audio id="audioServer1"></audio>
+</div>
+
+<div class="container">
+
+    <div class="row">
+        <nav>
+            <div class="nav-wrapper">
+                <div class="col s12">
+                    <a href="#" class="brand-logo">Angular</a>
+                </div>
+            </div>
+        </nav>
+
+    </div>
+
+    <div class="row">
+        <div id="speechTest" ng-app="digitalbs.speechSynthesis" ng-controller="speechCtrl">
+            <h3>Speech Synthesis with Angular</h3>
+            <p class="browser-support">Current Browser Support: Chrome Canary, Safari 7, Nightly Firefox</p>
+
+         
+
+
+            <form ng-submit="submitEntry()">
+                <select class="aSelect" ng-model="optionSelected" ng-options="voice.name for voice in voices">
+                    <option value="">Choose Accent</option>
+                </select>
+                <div class="controls">
+                    <label>Pitch: {{ pitch }}</label>
+                    <input type="range" ng-model="pitch" min="0" max="2" step="1" />
+
+                    <label>Rate: {{ rate }}</label>
+                    <input type="range" ng-model="rate" min="0.1" max="10" step="0.1" />
+
+                    <label>Volume: {{ volume }}</label>
+                    <input type="range" ng-model="volume" min="0" max="1" step="1" />
+                </div>
+
+                <input ng-model="msg" type="text" placeholder="Enter here" />
+                <button ng-click="updateLang()" class="btn">Get Accents/Voices</button>
+                <button class="btn">Speak!!</button>
+            </form>
+
+        </div>
+    </div>
+   
+</div>
+
+
+
+
+<div class="container">
+
+
+</div>
+
+<div id="modal1" class="modal">
+    <h4>Speech Synthesis not supported</h4>
+    <p>Your browser does not support speech synthesis.</p>
+    <p>We recommend you use Google Chrome.</p>
+    <div class="action-bar">
+        <a href="#" class="waves-effect waves-green btn-flat modal-action modal-close">Close</a>
+    </div>
+</div>
+
+
+<script>
+    
+    function ProcessServerSide1() {
+        var audio = document.getElementById('audioServer1');
+        audio.src = '/Home/TTS1?text=' + $('#txtServerSide1').val();
+        audio.load();
+        audio.play();
+    }
+
+    $(function () {
+        if ('speechSynthesis' in window) {
+            speechSynthesis.onvoiceschanged = function () {
+                var $voicelist = $('#voices');
+
+                if ($voicelist.find('option').length == 0) {
+                    speechSynthesis.getVoices().forEach(function (voice, index) {
+                        console.log(voice);
+                        var $option = $('<option>')
+                            .val(index)
+                            .html(voice.name + (voice.default ? ' (default)' : ''));
+
+                        $voicelist.append($option);
+                    });
+
+                    $voicelist.material_select();
+                }
+            }
+
+            $('#speak').click(function () {
+                var text = $('#message').val();
+                var msg = new SpeechSynthesisUtterance();
+                var voices = window.speechSynthesis.getVoices();
+                msg.voice = voices[$('#voices').val()];
+                msg.rate = $('#rate').val() / 10;
+                msg.pitch = $('#pitch').val();
+                msg.text = text;
+
+                msg.onend = function (e) {
+                    console.log('Finished in ' + event.elapsedTime + ' seconds.');
+                };
+
+                console.log(speechSynthesis);
+
+                speechSynthesis.speak(msg);
+            })
+        } else {
+            $('#modal1').openModal();
+        }
+    });
+
+
+</script>
+
+<script type="text/javascript" src="/Content/SpeakJs/mespeak.js"></script>
+
+
+<!-- Speak Js -->
+<script type="text/javascript">
+    meSpeak.loadConfig("/Content/SpeakJs/mespeak_config.json");
+    meSpeak.loadVoice("/Content/SpeakJs/voices/en/en.json");
+
+    function loadVoice(id) {
+        var fname = "/Content/SpeakJs/voices/" + id + ".json";
+        meSpeak.loadVoice(fname, voiceLoaded);
+    }
+
+    function voiceLoaded(success, message) {
+        if (success) {
+            //alert("Voice loaded: " + message + ".");
+        }
+        else {
+            alert("Failed to load a voice: " + message);
+        }
+    }
+
+    /*
+      auto-speak glue:
+      additional functions for generating a link and parsing any url-params provided for auto-speak
+    */
+
+    var formFields = ['text', 'amplitude', 'wordgap', 'pitch', 'speed'];
+
+    function autoSpeak() {
+        // checks url for speech params, sets and plays them, if found.
+        // also adds eventListeners to update a link with those params using current values
+        var i, l, n, params, pairs, pair,
+            speakNow = null,
+            useDefaultVoice = true,
+            q = document.location.search,
+            f = document.getElementById('speakData'),
+            s1 = document.getElementById('variantSelect'),
+            s2 = document.getElementById('voiceSelect');
+        if (!f || !s2) return; // form and/or select not found
+        if (q.length > 1) {
+            // parse url-params
+            params = {};
+            pairs = q.substring(1).split('&');
+            for (i = 0, l = pairs.length; i < l; i++) {
+                pair = pairs[i].split('=');
+                if (pair.length == 2) params[pair[0]] = decodeURIComponent(pair[1]);
+            }
+            // insert params into the form or complete them from defaults in form
+            for (i = 0, l = formFields.length; i < l; i++) {
+                n = formFields[i];
+                if (params[n]) {
+                    f.elements[n].value = params[n];
+                }
+                else {
+                    params[n] = f.elements[n].value;
+                }
+            }
+            if (params.variant) {
+                for (i = 0, l = s1.options.length; i < l; i++) {
+                    if (s1.options[i].value == params.variant) {
+                        s1.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            else {
+                params.variant = '';
+            }
+            // compile a function to speak with given params for later use
+            // play only, if param "auto" is set to "true" or "1"
+            if (params.auto == 'true' || params.auto == '1') {
+                speakNow = function () {
+                    meSpeak.speak(params.text, {
+                        amplitude: params.amplitude,
+                        wordgap: params.wordgap,
+                        pitch: params.pitch,
+                        speed: params.speed,
+                        variant: params.variant
+                    });
+                };
+            }
+            // check for any voice specified by the params (other than the default)
+            if (params.voice && params.voice != s2.options[s2.selectedIndex].value) {
+                // search selected voice in selector
+                for (i = 0, l = s2.options.length; i < l; i++) {
+                    if (s2.options[i].value == params.voice) {
+                        // voice found: adjust the form, load voice-data and provide a callback to speak
+                        s2.selectedIndex = i;
+                        meSpeak.loadVoice('voices/' + params.voice + '.json', function (success, message) {
+                            if (success) {
+                                if (speakNow) setTimeout(speakNow, 10);
+                            }
+                            else {
+                                if (window.console) console.log('Failed to load requested voice: ' + message);
+                            }
+                        });
+                        useDefaultVoice = false;
+                        break;
+                    }
+                }
+            }
+            // standard voice: speak (deferred until config is loaded)
+            if (speakNow && useDefaultVoice) speakNow();
+        }
+        // initial url-processing done, add eventListeners for updating the link
+        for (i = 0, l = formFields.length; i < l; i++) {
+            f.elements[formFields[i]].addEventListener('change', updateSpeakLink, false);
+        }
+        s1.addEventListener('change', updateSpeakLink, false);
+        s2.addEventListener('change', updateSpeakLink, false);
+        // finally, inject a link with current values into the page
+        updateSpeakLink();
+    }
+
+    function updateSpeakLink() {
+        // injects a link for auto-execution using current values into the page
+        var i, l, n, f, s, v, url, el, params = new Array();
+        // collect values from form
+        f = document.getElementById('speakData');
+        for (i = 0, l = formFields.length; i < l; i++) {
+            n = formFields[i];
+            params.push(n + '=' + encodeURIComponent(f.elements[n].value));
+        }
+        // get variant
+        s = document.getElementById('variantSelect');
+        if (s.selectedIndex >= 0) params.push('variant=' + s.options[s.selectedIndex].value);
+        // get current voice, default to 'en/en' as a last resort
+        s = document.getElementById('voiceSelect');
+        if (s.selectedIndex >= 0) v = s.options[s.selectedIndex].value;
+        if (!v) v = meSpeak.getDefaultVoice() || 'en/en';
+        params.push('voice=' + encodeURIComponent(v));
+        params.push('auto=true');
+        // assemble the url and add it as GET-link to the page
+        url = '?' + params.join('&');
+        url = url.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');
+        el = document.getElementById('linkdisplay');
+        if (el) el.innerHTML = 'Instant Link: <a href="' + url + '">Speak this</a>.';
+    }
+
+    // trigger auto-speak at DOMContentLoaded
+    if (document.addEventListener) document.addEventListener("DOMContentLoaded", autoSpeak, false);
+
+    /*
+      end of auto-speak glue
+    */
+
+</script>
+
+
+<!-- TTS Custom -->
+<script src="Content/TTS-Custom/TTS-Custom.js"></script>
+<script>
+    function CustomTTS() {
+        TextToSpeech.talk($("#txtCustomTTS").val());
+    }
+
+
+
+</script>
+
+
+@* Angular Way *@
+<script>
+    angular.module('digitalbs.speech', []).
+    factory('speech', function () {
+
+        if (window.speechSynthesis) {
+            var msg = new SpeechSynthesisUtterance();
+        }
+
+        function getVoices() {
+
+            window.speechSynthesis.getVoices();
+            return window.speechSynthesis.getVoices();
+        }
+
+        function sayIt(text, config) {
+            var voices = getVoices();
+
+            //choose voice. Fallback to default
+            msg.voice = config && config.voiceIndex ? voices[config.voiceIndex] : voices[0];
+            msg.volume = config && config.volume ? config.volume : 1;
+            msg.rate = config && config.rate ? config.rate : 1;
+            msg.pitch = config && config.pitch ? config.pitch : 1;
+
+            //message for speech
+            msg.text = text;
+
+            speechSynthesis.speak(msg);
+        }
+
+
+        return {
+            sayText: sayIt,
+            getVoices: getVoices
+        };
+    });
+
+
+    angular.module('digitalbs.speechSynthesis', ['digitalbs.speech'])
+        .controller('speechCtrl', ['$scope', '$timeout', 'speech', function ($scope, $timeout, speech) {
+            $scope.support = false;
+            if (window.speechSynthesis) {
+                $scope.support = true;
+
+                $timeout(function () {
+                    $scope.voices = speech.getVoices();
+                   
+                }, 500);
+
+                
+            }
+
+            $scope.pitch = 1;
+            $scope.rate = 1;
+            $scope.volume = 1;
+            $scope.updateLang=function() {
+                $('.aSelect').material_select();
+            }
+            $scope.submitEntry = function () {
+                var voiceIdx = $scope.voices.indexOf($scope.optionSelected),
+                    config = {
+                        voiceIndex: voiceIdx,
+                        rate: $scope.rate,
+                        pitch: $scope.pitch,
+                        volume: $scope.volume
+                    };
+
+                if (window.speechSynthesis) {
+                    speech.sayText($scope.msg, config);
+                }
+            }
+           
+        }]);
+</script>
+
+<!-- Say.js -->
+@*<script src="http://requirejs.org/docs/release/2.2.0/minified/require.js"></script>
+    <script>
+        var say = require('say');
+
+        // Use default system voice and speed
+        say.speak('Hello!');
+
+        // Stop the text currently being spoken
+        say.stop();
+
+        // More complex example (with an OS X voice) and slow speed
+        say.speak('whats up, dog?', 'Alex', 0.5);
+
+        // Fire a callback once the text has completed being spoken
+        say.speak('whats up, dog?', 'Good News', 1.0, function (err) {
+            if (err) {
+                return console.error(err);
+            }
+
+            console.log('Text has been spoken.');
+        });
+
+        // Export spoken audio to a WAV file
+        say.export("I'm sorry, Dave.", 'Cellos', 0.75, 'hal.wav', function (err) {
+            if (err) {
+                return console.error(err);
+            }
+
+            console.log('Text has been saved to hal.wav.');
+        });
+
+    </script>*@
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    //Material
+    $(document).ready(function () {
+        $('.mSelect').material_select();
+    });
+</script>
