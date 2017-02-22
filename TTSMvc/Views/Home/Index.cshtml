@@ -104,17 +104,17 @@
                 </p>
                 <p>
                     <strong>Voice:</strong> <select id="voiceSelect" class="mSelect" onchange="loadVoice(this.options[this.selectedIndex].value);">
-                        <option value="ca">ca - Catalan</option>
+                        @*<option value="ca">ca - Catalan</option>
                         <option value="cs">cs - Czech</option>
                         <option value="de">de - German</option>
-                        <option value="el">el - Greek</option>
+                        <option value="el">el - Greek</option>*@
                         <option value="en/en" selected="selected">en - English</option>
                         <option value="en/en-n">en-n - English, regional</option>
                         <option value="en/en-rp">en-rp - English, regional</option>
                         <option value="en/en-sc">en-sc - English, Scottish</option>
                         <option value="en/en-us">en-us - English, US</option>
                         <option value="en/en-wm">en-wm - English, regional</option>
-                        <option value="eo">eo - Esperanto</option>
+                        @*<option value="eo">eo - Esperanto</option>
                         <option value="es">es - Spanish</option>
                         <option value="es-la">es-la - Spanish, Latin America</option>
                         <option value="fi">fi - Finnish</option>
@@ -133,7 +133,7 @@
                         <option value="sv">sv - Swedish</option>
                         <option value="tr">tr - Turkish</option>
                         <option value="zh">zh - Mandarin Chinese (Pinyin)</option>
-                        <option value="zh-yue">zh-yue - Cantonese Chinese</option>
+                        <option value="zh-yue">zh-yue - Cantonese Chinese</option>*@
                     </select>
                 </p>
                 <p>
@@ -274,12 +274,15 @@
 
                 if ($voicelist.find('option').length == 0) {
                     speechSynthesis.getVoices().forEach(function (voice, index) {
+                        if (voice.name.includes('English') || voice.name.includes('native'))
+                            {
                         console.log(voice);
                         var $option = $('<option>')
                             .val(index)
                             .html(voice.name + (voice.default ? ' (default)' : ''));
 
                         $voicelist.append($option);
+                    }
                     });
 
                     $voicelist.material_select();
@@ -484,13 +487,27 @@
 
         function getVoices() {
 
-            window.speechSynthesis.getVoices();
+            //window.speechSynthesis.getVoices();
             return window.speechSynthesis.getVoices();
         }
 
-        function sayIt(text, config) {
-            var voices = getVoices();
+        function getEnglishVoices() {
 
+            var voiceList = [];
+            var voices = window.speechSynthesis.getVoices();
+
+            for (var i = 0; i < voices.length; i++) {
+                if (voices[i].name.includes('English') || voices[i].name.includes('native')) {
+                    voiceList.push(voices[i])
+                }
+            }
+            
+            return voiceList;
+        }
+
+        function sayIt(text, config) {
+            var voices = getEnglishVoices();// getVoices();
+            debugger;
             //choose voice. Fallback to default
             msg.voice = config && config.voiceIndex ? voices[config.voiceIndex] : voices[0];
             msg.volume = config && config.volume ? config.volume : 1;
@@ -506,7 +523,8 @@
 
         return {
             sayText: sayIt,
-            getVoices: getVoices
+            getVoices: getVoices,
+            getEnglishVoices:getEnglishVoices
         };
     });
 
@@ -518,8 +536,9 @@
                 $scope.support = true;
 
                 $timeout(function () {
-                    $scope.voices = speech.getVoices();
-                   
+                    //$scope.voices = speech.getVoices();
+                    $scope.voices = speech.getEnglishVoices();
+                    
                 }, 500);
 
                 
